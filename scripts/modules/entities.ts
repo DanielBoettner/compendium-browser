@@ -96,12 +96,14 @@ export class Entities {
                                     compact.orderSize = decorated.filterSize;
                                     compact.data.details = decorated.data.details;
                                 break;
+                            case "Scene":
+                                    compact.img = currentEntity.data.thumb;
                             default:
                                 break;
                         }
 
                         comp_list.addEntity(compact);
-                        if (updateLoading) { Renderer.updateLoading(entityType, numItemsLoaded, numPacks, 500); }
+                        if (updateLoading) {ui.notifications.info(`Loaded ${numItemsLoaded} ${entityType}s from ${numPacks} Compendia.`);}
                         if (numItemsLoaded++ >= maxLoad) break;                        
                     }
                 }); // get Entities
@@ -149,6 +151,7 @@ export class Entities {
                     ['Feats', 'data.class'],                    
                     ['RollTable', 'compendium'],
                     ['JounralEntry', 'name'],
+                    ['Scene', 'name'],
                 ]);
 
                 list.entities.sort((left: compactEntity, right: compactEntity) => {

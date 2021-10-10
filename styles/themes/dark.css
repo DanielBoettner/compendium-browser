@@ -27,3 +27,6 @@
   --checkbox-unchecked: #4b4b4b;
   --checkbox-checked: rgba(0, 255, 0, 0.5);
 }
+.system-dnd5e.tidy5eDark .app.compendium-browser .window-content {
+  color: var(--primary-font);
+}

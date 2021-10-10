@@ -10,7 +10,7 @@
 		border: 1px solid #acacac;
 		display: inline-block;
 		margin: auto;
-		background: rgba(0,0,0,0.3);
+		background: var(--background);
 		border-radius: 0.3em;
 		color: #cecece;
 	}
@@ -60,9 +60,7 @@
 			overflow: scroll;
 		}
 	}
-	
-
-	
+		
 	.settings {
 		.settings-group {
 			border: 1px solid #bbb;
@@ -86,6 +84,7 @@
 			}
 		}
 	}
+
 	.actions {
 		flex: 0 0 32px;
 		box-sizing: content-box;
@@ -109,6 +108,8 @@
 				border-radius: 0;
 			}
 		}
-	}
-	
+	}	
 }
+
+@import	'components/sidebars.less';
+@import 'components/entity-browser.less';

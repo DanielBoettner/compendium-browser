@@ -57,14 +57,18 @@ export class Events {
         });
     }
 
+    /**
+     * 
+     * @param {HTMLCollection} app 
+     */
     static async activateItemListListeners(app = document.getElementsByClassName('window-app')) {
         app = app[0];
 
         // open entity sheet on click
         app.querySelectorAll('*[data-action="openSheet"]').forEach(async el => {
             el.addEventListener('click', async (e) => {
-                let itemId = e.currentTarget.parentNode.dataset.entryId;
-                let compendium = e.currentTarget.parentNode.dataset.entryCompendium;
+                let itemId = e.currentTarget.parentNode.dataset.entityId;
+                let compendium = e.currentTarget.parentNode.dataset.entityCompendium;
                 let pack = game.packs.find(p => p.collection === compendium);
                 await pack.getEntity(itemId).then(entity => {
                     entity.sheet.render(true);
@@ -73,22 +77,43 @@ export class Events {
         });
 
         // make draggable
-        //0.4.1: Avoid the game.packs lookup
         app.querySelectorAll('.draggable').forEach(async li => {
             li.setAttribute("draggable", true);
             li.addEventListener('dragstart', event => {
-                let packName = li.getAttribute("data-entry-compendium");
-                let pack = game.packs.find(p => p.collection === packName);
-                if (!pack) {
-                    event.preventDefault();
-                    return false;
-                }
                 event.dataTransfer.setData("text/plain", JSON.stringify({
-                    type: pack.entity,
-                    pack: pack.collection,
-                    id: li.getAttribute("data-entry-id")
+                    type: li.dataset.entityType,
+                    pack: li.dataset.entityCompendium,
+                    id: li.dataset.entityId,
+                    name: li.dataset.entityName
                 }));
             }, false);
+        });
+    }
+
+    /**
+     * 
+     * @param {HTML|undefined} app 
+     */
+    static async registerDropTarget(app = document.getElementsByClassName('window-app')){
+        app = app[0];
+        let dropTarget = app.querySelector('.droptarget');
+        dropTarget.addEventListener('dragover', async (e) => {
+            e.preventDefault();
+            dropTarget.style.border = '1px solid red';
+        });
+        dropTarget.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            let newEntry = JSON.parse(e.dataTransfer.getData("text/plain"));
+
+            let row = dropTarget.insertRow();
+            let compendium = row.insertCell(0);
+            let name = row.insertCell(1);
+            name.appendChild(document.createTextNode(newEntry.name));
+            compendium.appendChild(document.createTextNode(newEntry.pack));
+
+            row.dataset.id = newEntry.id;
+            row.dataset.pack = newEntry.pack;
+            row.dataset.type = newEntry.type;            
         });
     }
 
@@ -103,6 +128,7 @@ export class Events {
 
         // toggle visibility of filter containers
         html.find('.filtercontainer h3, .multiselect label').click(async ev => {
+            ev.target.classList.toggle('opened');
             await $(ev.target.nextElementSibling).toggle(100);
         });
 
@@ -147,6 +173,9 @@ export class Events {
                 case 'allow-rolltable-browser':
                     game.compendiumBrowser.settings.allowRollTableBrowser = value;
                     break;
+                case 'allow-scene-browser':                     
+                    game.compendiumBrowser.settings.allowSceneBrowser = value;
+                    break;
                 case 'allow-journalentry-browser':
                     game.compendiumBrowser.settings.allowJournalEntryBrowser = value;
                     break;
@@ -173,7 +202,7 @@ export class Events {
                             type: 'text',
                             valIsArray: false,
                             value: e.target.value
-                        }
+                        };
                     }
         
                     game.compendiumBrowser.replaceList(html, entityType);
@@ -199,7 +228,7 @@ export class Events {
                         type: filterType,
                         valIsArray: valIsArray,
                         value: value
-                    }
+                    };
                 }
                 game.compendiumBrowser.replaceList(html, entityType);
 
@@ -246,7 +275,7 @@ export class Events {
                     value = e.target.closest('.filter').getElementsByTagName('input').val;
 
                 if (value === '' || operator === 'null') {
-                    delete game.compendiumBrowser.filters[entityType].activeFilters[key]
+                    delete game.compendiumBrowser.filters[entityType].activeFilters[key];
                 } else {
                     game.compendiumBrowser.filters[entityType].activeFilters[key] = {
                         path: path,
@@ -254,7 +283,7 @@ export class Events {
                         valIsArray: false,
                         operator: operator,
                         value: value
-                    }
+                    };
                 }
 
                 game.compendiumBrowser.replaceList(html, browserTab);

@@ -1,12 +1,13 @@
 import { Filter as FilterEntity } from "../classes/filter.js";
 
-export class Filter {
-    public Spell: any = this._getInitialFilters();
+export class Filter {   
     public Actor: any = this._getInitialFilters();
     public Feat: any = this._getInitialFilters();
     public Item: any = this._getInitialFilters();
-    public RollTable: any = this._getInitialFilters();
     public JournalEntry: any = this._getInitialFilters();
+    public RollTable: any = this._getInitialFilters();
+    public Scene: any = this._getInitialFilters();    
+    public Spell: any = this._getInitialFilters();
 
     /**
      * 
@@ -89,12 +90,14 @@ export class Filter {
     }
 
     resetFilters() {
-        this.Spell.activeFilters = {};
+        this.Actor.activeFilters = {};
         this.Feat.activeFilters = {};
         this.Item.activeFilters = {};
-        this.Actor.activeFilters = {};
-        this.RollTable.activeFilters = {};
-        this.JournalEntry.activeFilters = {};
+        this.JournalEntry.activeFilters = {};        
+        this.RollTable.activeFilters = {};      
+        this.Scene.activeFilters = {};
+        this.Spell.activeFilters = {};
+        
     }
 
     /**
@@ -117,6 +120,7 @@ export class Filter {
         await this.addItemFilters();
         await this.addActorFilters();
         await this.addRollTableFilters();
+        await this.addSceneFilters();
     }
 
     /**
@@ -318,6 +322,17 @@ export class Filter {
             better: "Better",
             loot: "Loot",
             story: "Story",
+        })
+    }
+    
+    async addSceneFilters() {
+        const SCENE = 'Scene';
+        this.addFilter(SCENE, game.i18n.localize("CMPBrowser.general"), game.i18n.localize("CMPBrowser.Scene.Dimensions"), 'data', 'select', {
+            none: "FoundryVTT default",
+            small: "small",
+            medium: "medium",
+            large: "large",
+            kkkk: "4K"
         })
     }
 }

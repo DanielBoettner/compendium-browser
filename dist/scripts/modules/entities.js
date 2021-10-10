@@ -1,5 +1,4 @@
 import { Filter } from './filter.js';
-import { Renderer } from './renderer.js';
 import { CMPBrowser } from './settings.js';
 import { compactEntity } from '../classes/compactEntity.js';
 import { decoratedEntity } from '../classes/decoratedEntity.js';
@@ -85,12 +84,14 @@ export class Entities {
                                 compact.orderSize = decorated.filterSize;
                                 compact.data.details = decorated.data.details;
                                 break;
+                            case "Scene":
+                                compact.img = currentEntity.data.thumb;
                             default:
                                 break;
                         }
                         comp_list.addEntity(compact);
                         if (updateLoading) {
-                            Renderer.updateLoading(entityType, numItemsLoaded, numPacks, 500);
+                            ui.notifications.info(`Loaded ${numItemsLoaded} ${entityType}s from ${numPacks} Compendia.`);
                         }
                         if (numItemsLoaded++ >= maxLoad)
                             break;
@@ -141,6 +142,7 @@ export class Entities {
                     ['Feats', 'data.class'],
                     ['RollTable', 'compendium'],
                     ['JounralEntry', 'name'],
+                    ['Scene', 'name'],
                 ]);
                 list.entities.sort((left, right) => {
                     let sort = defaultSort.get(entityType) || '', result = SortCollator.compare(getProperty(left, sort), getProperty(right, sort));

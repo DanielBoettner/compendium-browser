@@ -39,7 +39,135 @@
   text-transform: capitalize;
 }
 .compendium-browser .browser .list-area {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(12vw, 100%), 1fr));
   grid-template-rows: auto;
-  grid-template-columns: auto;
   grid-area: CONTENT;
+}
+.compendium-browser .browser .cb_entities .entity-header {
+  display: grid;
+  grid-template-columns: 0.55fr 0.1fr 1fr;
+  gap: 0px 2.5em;
+  text-align: center;
+  border: 1px dotted rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+.compendium-browser .browser .cb_entities .entity {
+  background: var(--background);
+  color: darkgrey;
+  border-radius: 5px;
+  margin: 0.2em;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 0.1em;
+  height: clamp(5vh, 6vh, 7vh);
+  box-shadow: 0 0 3px inset var(--light-color);
+  display: grid;
+  grid-template-columns: 0.2fr 1fr;
+  grid-column-gap: 5px;
+  grid-template-areas: "Image Name" "Image Tags";
+}
+.compendium-browser .browser .cb_entities .entity:hover {
+  box-shadow: 0 0 3px inset var(--icon-hover);
+}
+.compendium-browser .browser .cb_entities .entity .entity-image {
+  cursor: pointer;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(83, 75, 75, 0.3);
+  padding: 0.1em;
+  border-radius: 0.5em;
+  justify-content: center;
+  align-items: center;
+  background-clip: border-box;
+  background-image: url('/icons/svg/daze.svg');
+  background-size: cover;
+  width: 3.2em;
+  grid-area: Image;
+  box-shadow: 0 0 0.2em 0.1em inset rgba(43, 45, 46, 0.863);
+}
+.compendium-browser .browser .cb_entities .entity .entity-name {
+  grid-area: Name;
+  color: rgba(236, 229, 229, 0.932);
+  font-size: 12px;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-size: 0.9vw;
+  font-weight: 400;
+  overflow: hidden;
+  height: 100%;
+}
+.compendium-browser .browser .cb_entities .entity ul.tags {
+  list-style: none;
+  min-width: initial;
+  box-sizing: content-box;
+  grid-area: Tags;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 16px);
+  margin: 0;
+}
+.compendium-browser .browser .cb_entities .entity .tags .spell-tag {
+  color: var(--background);
+}
+.compendium-browser .browser .cb_entities .entity .tags .spell-tag.active {
+  color: var(--primary-font);
+}
+.compendium-browser .browser .cb_entities .entity .tags li {
+  cursor: help;
+  color: var(--faint-color);
+  justify-content: center;
+  align-items: center;
+  height: 1.6em;
+  width: 1.6em;
+  font-size: 0.8em;
+  line-height: 1.6em;
+  display: inline-block;
+  padding: 0.2em;
+  border-radius: 0.1em;
+}
+.compendium-browser .browser .cb_entities .entity.r_common {
+  border-left: 0.3em solid #ffffff;
+}
+.compendium-browser .browser .cb_entities .entity.r_common .entity-image {
+  box-shadow: 0 0 0.2em 0.1em inset rgba(var(#ffffff), 0.75);
+}
+.compendium-browser .browser .cb_entities .entity.r_uncommon {
+  border-color: #1eff00;
+  background: linear-gradient(90deg, #1eff00 0%, var(--background) 35%);
+}
+.compendium-browser .browser .cb_entities .entity.r_uncommon .entity-image {
+  box-shadow: 0 0 0.2em 0.1em inset rgba(var(#1eff00), 0.75);
+}
+.compendium-browser .browser .cb_entities .entity.r_rare {
+  border-color: #0070dd;
+  background: linear-gradient(90deg, #0070dd 0%, var(--background) 35%);
+}
+.compendium-browser .browser .cb_entities .entity.r_rare .entity-image {
+  box-shadow: 0 0 0.2em 0.1em inset rgba(var(#0070dd), 0.75);
+}
+.compendium-browser .browser .cb_entities .entity.r_veryrare {
+  border-color: #a335ee;
+  background: linear-gradient(90deg, #a335ee 0%, var(--background) 35%);
+}
+.compendium-browser .browser .cb_entities .entity.r_veryrare .entity-image {
+  box-shadow: 0 0 0.2em 0.1em inset rgba(var(#a335ee), 0.75);
+}
+.compendium-browser .browser .cb_entities .entity.r_legendary {
+  border-color: #ff8000;
+  background: linear-gradient(90deg, #ff8000 0%, var(--background) 35%);
+}
+.compendium-browser .browser .cb_entities .entity.r_legendary .entity-image {
+  box-shadow: 0 0 0.2em 0.1em inset rgba(var(#ff8000), 0.75);
+}
+.compendium-browser .tab.active[data-tab="Scene"] .cb_entities .entity {
+  grid-template-areas: "Name" "Image";
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.2fr 1fr;
+}
+.compendium-browser .tab.active[data-tab="Scene"] .cb_entities .entity .entity-image {
+  width: initial;
+  height: initial;
+}
+.compendium-browser .tab.active[data-tab="Scene"] .cb_entities .entity .entity-name {
+  position: absolute;
+  z-index: 999;
+  padding: 0.5em;
+  font-size: 1.4em;
 }

@@ -50,7 +50,8 @@ export class CompendiumBrowser extends Application {
             "modules/compendium-browser/template/entity-list.hbs",
             "modules/compendium-browser/template/filter-container.hbs",
             "modules/compendium-browser/template/settings.hbs",
-            "modules/compendium-browser/template/loading.hbs"
+            "modules/compendium-browser/template/loading.hbs",
+            "modules/compendium-browser/template/export.hbs"
         ]);
 
         this.filters.addEntityFilters();
@@ -77,18 +78,20 @@ export class CompendiumBrowser extends Application {
             items: [],
             actors: [],
             filters: {
-                Spell: this.filters.getByName('Spell'),
-                Item: this.filters.getByName('Item'),
                 Actor: this.filters.getByName('Actor'),
+                Item: this.filters.getByName('Item'),
+                JournalEntry: this.filters.getByName('JounralEntry'),                
                 RollTable: this.filters.getByName('RollTable'),
-                JournalEntry: this.filters.getByName('RollTable')
+                Spell: this.filters.getByName('Spell'),
+                Scene: this.filters.getByName('Scene'),
             },
-            showSpellBrowser: (game.user.isGM) || this.settings.allowSpellBrowser,
+            showActorBrowser: (game.user.isGM) || this.settings.allowActorBrowser,            
             showFeatBrowser: (game.user.isGM) || this.settings.allowFeatBrowser,
             showItemBrowser: (game.user.isGM) || this.settings.allowItemBrowser,
-            showActorBrowser: (game.user.isGM) || this.settings.allowActorBrowser,
+            showJournalEntryBrowser: (game.user.isGM) || this.settings.allowJournalEntryBrowser,                        
             showRollTableBrowser: (game.user.isGM) || this.settings.allowRollTableBrowser,
-            showJournalEntryBrowser: (game.user.isGM) || this.settings.allowJournalEntryBrowser,            
+            showSceneBrowser: (game.user.isGM) || this.settings.allowSceneBrowser,            
+            showSpellBrowser: (game.user.isGM) || this.settings.allowSpellBrowser,
             settings: this.settings,
             isGM: game.user.isGM
         };
@@ -119,7 +122,8 @@ export class CompendiumBrowser extends Application {
         Events.activateActionListener(html);
         Events.activateItemListListeners(html);
         Events.activateFilterListeners(html);
-
+        Events.registerDropTarget(html);
+        
         //Just for the loading image
         if (this.observer) {
             html.find(".entity-image").each((i, imageElement) => this.observer.observe(imageElement));
@@ -161,6 +165,8 @@ export class CompendiumBrowser extends Application {
                     this.refreshList = "JournalEntry";
                 } else if (this.settings.allowRollTableBrowser) {
                     this.refreshList = "RollTable";
+                } else if (this.settings.allowRollTableBrowser) {
+                      this.refreshList = "Scene";
                 }
                 this.render(true);
             });
@@ -177,7 +183,7 @@ export class CompendiumBrowser extends Application {
         //After rendering the first time or re-rendering trigger the load/reload of visible data
         let entityListElement = document.querySelector('.tab.active .browser .cb_entities');
 
-        if (entityListElement.childElementCount !== undefined) {
+        if (entityListElement && entityListElement.childElementCount !== undefined) {
             //0.4.2b: On a tab-switch, only reload if there isn't any data already 
             if (options?.reload || entityListElement.childElementCount < 1) {
 

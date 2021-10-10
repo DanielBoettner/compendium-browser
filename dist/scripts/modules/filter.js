@@ -1,12 +1,13 @@
 import { Filter as FilterEntity } from "../classes/filter.js";
 export class Filter {
     constructor() {
-        this.Spell = this._getInitialFilters();
         this.Actor = this._getInitialFilters();
         this.Feat = this._getInitialFilters();
         this.Item = this._getInitialFilters();
-        this.RollTable = this._getInitialFilters();
         this.JournalEntry = this._getInitialFilters();
+        this.RollTable = this._getInitialFilters();
+        this.Scene = this._getInitialFilters();
+        this.Spell = this._getInitialFilters();
     }
     /**
      *
@@ -102,12 +103,13 @@ export class Filter {
         return getProperty(this, entityType);
     }
     resetFilters() {
-        this.Spell.activeFilters = {};
+        this.Actor.activeFilters = {};
         this.Feat.activeFilters = {};
         this.Item.activeFilters = {};
-        this.Actor.activeFilters = {};
-        this.RollTable.activeFilters = {};
         this.JournalEntry.activeFilters = {};
+        this.RollTable.activeFilters = {};
+        this.Scene.activeFilters = {};
+        this.Spell.activeFilters = {};
     }
     /**
      *
@@ -128,6 +130,7 @@ export class Filter {
         await this.addItemFilters();
         await this.addActorFilters();
         await this.addRollTableFilters();
+        await this.addSceneFilters();
     }
     /**
      * Used to add custom filters to the Spell-Browser
@@ -299,6 +302,16 @@ export class Filter {
             better: "Better",
             loot: "Loot",
             story: "Story",
+        });
+    }
+    async addSceneFilters() {
+        const SCENE = 'Scene';
+        this.addFilter(SCENE, game.i18n.localize("CMPBrowser.general"), game.i18n.localize("CMPBrowser.Scene.Dimensions"), 'data', 'select', {
+            none: "FoundryVTT default",
+            small: "small",
+            medium: "medium",
+            large: "large",
+            kkkk: "4K"
         });
     }
 }

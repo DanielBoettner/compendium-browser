@@ -1,7 +1,7 @@
 {{#each entityItems as |entity|}}
-<li class="entity flexrow draggable r_{{entity.rarity}}" data-entry-compendium="{{entity.compendium}}"
-    data-entry-id="{{entity._id}}" data-entry-name="{{entity.name}}" data-entry-image="{{entity.img}}"
-    data-entry-type="{{entity.type}}">
+<li class="entity flexrow draggable r_{{entity.rarity}}" data-entity-compendium="{{entity.compendium}}"
+    data-entity-id="{{entity._id}}" data-entity-name="{{entity.name}}" data-entity-image="{{entity.img}}"
+    data-entity-type="{{entity.type}}">
 
     <aside class="entity-image" data-action="openSheet" data-src="{{entity.img}}" title="{{entity.name}}">
         <i class="fas fa-d20"></i>

@@ -15,6 +15,7 @@ export class ModuleSettings {
                 Item: {},
                 JournalEntry: {},
                 RollTable: {},
+                Scene: {}
             }
         };
         for (let compendium of game.packs) {
@@ -35,14 +36,9 @@ export class ModuleSettings {
         let defaultSettings = ModuleSettings._getDefaults();
         // load settings from container and apply to default settings (available compendia might have changed)
         let settings = game.settings.get(CMPBrowser.MODULE_NAME, SETTINGS);
-        for (let compKey in defaultSettings.loadedSpellCompendium) {
-            if (settings.loadedSpellCompendium[compKey] !== undefined) {
-                defaultSettings.loadedSpellCompendium[compKey].load = settings.loadedSpellCompendium[compKey].load;
-            }
-        }
-        for (let compKey in defaultSettings.loadedActorCompendium) {
-            if (settings.loadedActorCompendium[compKey] !== undefined) {
-                defaultSettings.loadedActorCompendium[compKey].load = settings.loadedActorCompendium[compKey].load;
+        for (let compKey in defaultSettings.loadedCompendium) {
+            if (settings.loadedCompendium[compKey] !== undefined) {
+                defaultSettings.loadedCompendium[compKey].load = settings.loadedCompendium[compKey].load;
             }
         }
         defaultSettings.allowSpellBrowser = settings.allowSpellBrowser ? true : false;
@@ -51,6 +47,7 @@ export class ModuleSettings {
         defaultSettings.allowActorBrowser = settings.allowActorBrowser ? true : false;
         defaultSettings.allowJournalEntryBrowser = settings.allowJournalEntryBrowser ? true : false;
         defaultSettings.allowRollTableBrowser = settings.allowRollTableBrowser ? true : false;
+        defaultSettings.allowRollTableBrowser = settings.allowSceneBrowser ? true : false;
         if (game.user.isGM) {
             game.settings.set(CMPBrowser.MODULE_NAME, SETTINGS, defaultSettings);
             console.log("New default settings set");

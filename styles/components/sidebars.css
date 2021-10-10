@@ -1,0 +1,166 @@
+.control-area {
+  background: var(--background);
+  box-shadow: 0 0 0.3em 0.3em var(--context-shadow);
+  border-color: var(--header-border);
+  border-style: solid;
+  border-width: 0 1px 0 1px;
+  color: var(--primary-font);
+  display: grid;
+  grid-gap: 0;
+  height: calc(100% -40px);
+  width: max-content;
+  padding: 0.3em;
+  position: sticky;
+  left: -1px;
+  right: -1px;
+  /* Toggler Functionality */
+}
+.control-area.l_sidebar {
+  grid-template-columns: 1fr 2em;
+  grid-template-areas: "CONTENT TOGGLER";
+  margin-left: -2em;
+}
+.control-area.r_sidebar {
+  grid-template-columns: 2em 1fr;
+  grid-template-areas: "TOGGLER CONTENT";
+  position: absolute;
+  top: 12vh;
+  right: -1px;
+  left: auto;
+  height: calc(100% - 44px);
+}
+.control-area button {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  margin-top: 5px;
+  padding: 2px;
+}
+.control-area .toggler {
+  display: inline;
+  grid-area: TOGGLER;
+  font-size: 0;
+  width: 0;
+  height: 0;
+  color: var(--primary-color);
+}
+.control-area .toggler:after {
+  cursor: pointer;
+  content: "\f0b0";
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  font-size: 16px;
+  position: absolute;
+  border-radius: 3px;
+  background: none;
+  color: darkgrey;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  text-rendering: auto;
+  font-variant: normal;
+}
+.control-area .toggler:hover:before {
+  content: 'toggle sidebar';
+  position: absolute;
+  display: block;
+  font-size: 14px;
+  background: #333;
+  padding: 5px;
+  left: 30px;
+  width: max-content;
+  border: 1px solid grey;
+  border-radius: 0 3px 3px 3px;
+  z-index: 999;
+}
+.r_sidebar.control-area .toggler:hover:before {
+  left: auto;
+  right: 30px;
+}
+.control-area .toggler:checked:after {
+  color: var(--checkbox-checked);
+}
+.control-area .toggler ~ .sidebar_content {
+  display: none;
+}
+.control-area .toggler ~ .sidebar_content * {
+  color: var(--primary-font);
+}
+.control-area .toggler ~ .sidebar_content * option {
+  background: var(--background);
+}
+.control-area .toggler:checked ~ .sidebar_content {
+  display: initial;
+  grid-area: CONTENT;
+  width: max-content;
+}
+.control-area .filtercontainer {
+  margin-top: 5px;
+  padding: 2px;
+}
+.control-area .filtercontainer h3 {
+  margin: 0;
+  cursor: pointer;
+}
+.control-area .filtercontainer h3 :after {
+  display: inline-block;
+  height: auto;
+  content: "\25BE";
+  position: absolute;
+  right: 0.2em;
+  font-size: 1.2em;
+}
+.control-area .filtercontainer h3.opened:after {
+  content: "\25B4";
+}
+.control-area .filtercontainer dl {
+  margin: 0;
+}
+.control-area .filtercontainer div {
+  margin: 5px 0;
+}
+.control-area .filtercontainer dt {
+  display: inline-block;
+  width: 40%;
+  padding-left: 5px;
+  font-weight: 400;
+}
+.control-area .filtercontainer dd {
+  display: inline-block;
+  width: 58%;
+  margin-left: 0;
+}
+.control-area .filtercontainer dd select {
+  width: 100%;
+}
+.control-area .filtercontainer input,
+.control-area .filtercontainer select {
+  height: 1.4em;
+  font-size: 0.9em;
+  font-weight: 400;
+}
+.control-area .filtercontainer .multiselect {
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  vertical-align: middle;
+  line-height: 32px;
+  margin: 2px 0;
+}
+.control-area .filtercontainer .multiselect label {
+  padding: 5px;
+}
+.control-area .filtercontainer .multiselect input {
+  vertical-align: middle;
+}
+.control-area .filtercontainer .small-input {
+  width: calc(100% - 44px);
+  height: 27px;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid #444;
+  border-radius: 3px;
+  padding: 0 3px;
+  text-overflow: ellipsis;
+}
+.control-area .filtercontainer .small-select {
+  width: 40px;
+}

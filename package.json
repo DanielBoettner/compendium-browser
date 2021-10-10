@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A browser with simple UI to browse and filter entites from a compendium in FoundryVTT",
   "main": "compendium-browser.js",
+  "type": "module",
   "directories": {
     "doc": "docs"
   },

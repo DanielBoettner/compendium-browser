@@ -170,6 +170,8 @@ export class decoratedEntity extends compactEntity {
                     decorated.classRequirement = classes.split(',');
                 }
                 break;
+            case 'Scene':
+                decorated.data.dimensions = entityData.height + ' * ' + entityData.width;
         }
 
         return decorated;

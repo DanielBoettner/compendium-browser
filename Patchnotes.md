@@ -1,3 +1,22 @@
+#v0.6.0
+- new: Export to a world/compendium rolltable
+- new: UI inspired by TidySheet5e
+- new: Light (default) and dark mode color scheme
+- new: the source files are structured to give developers a cleaner environment
+  -  most parts of the module are now TypeScript
+  - `hooks` for event related js
+  - `scripts` as the base folder for app related js
+  - `data` holding json files with data used to filter results
+
+- added: JournalEntry Browser
+- added: RollTable Browser
+- added: code documentation
+- added: user documentation
+- added: german translation
+
+- changed: Used native JS calls instead of jQuery wherever possible
+- changed: The style definitions are now written in less
+
 #v0.5.0
 - Fixed: Issue #17 (error in filtering NPCs by Creature Type)
 
