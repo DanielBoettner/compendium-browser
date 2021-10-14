@@ -1,0 +1,5 @@
+.vscode
+.jshintrc
+.eslintrc
+foundry.js
+package-lock.json

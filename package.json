@@ -13,7 +13,7 @@
     "less": "lessc ./styles/compendium-browser.less ./dist/styles/compendium-browser.css",
     "tsc": "tsc",
     "cleancss": "cleancss -o ./dist/styles/compendium-browser.min.css ./dist/styles/compendium-browser.css",
-    "jsdoc": "jsdoc -r . -d ./docs"
+    "generate-docs": "jsdoc -c jsdoc.json"
   },
   "repository": {
     "type": "git",
