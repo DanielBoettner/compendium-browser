@@ -8,7 +8,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "all": "npm run copyfiles && npm run less && npm run tsc && npm run cleancss && npm run jsdoc",
+    "all": "npm run copyfiles && npm run less && npm run tsc && npm run cleancss && npm run generate-docs",
     "copyfiles": "copyfiles ./template/*.hbs ./dist",
     "less": "lessc ./styles/compendium-browser.less ./dist/styles/compendium-browser.css",
     "tsc": "tsc",
@@ -29,5 +29,6 @@
   "bugs": {
     "url": "https://github.com/DanielBoettner/compendium-browser/issues"
   },
-  "homepage": "https://github.com/DanielBoettner/compendium-browser#readme"
+  "homepage": "https://github.com/DanielBoettner/compendium-browser#readme",
+  "dependencies": {}
 }

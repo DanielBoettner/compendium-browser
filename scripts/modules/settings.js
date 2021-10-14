@@ -6,6 +6,8 @@ export const CMPBrowser = {
 
 const SETTINGS = 'settings';
 
+export const STOP_SEARCH = 'StopSearchException';
+
 export class ModuleSettings {
 
     /**

@@ -4,6 +4,7 @@ export const CMPBrowser = {
     MAXLOAD: 500, //Default for the maximum number to load before displaying a message that you need to filter to see more    
 };
 const SETTINGS = 'settings';
+export const STOP_SEARCH = 'StopSearchException';
 export class ModuleSettings {
     /**
      * constructs and returns defaults settings

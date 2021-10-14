@@ -1,6 +1,5 @@
 import { Filter } from './filter.js';
-import { Renderer } from './renderer.js';
-import { CMPBrowser, ModuleSettings } from './settings.js';
+import { CMPBrowser, STOP_SEARCH } from './settings.js';
 
 import { compactEntity } from '../classes/compactEntity.js';
 import { decoratedEntity } from '../classes/decoratedEntity.js';
@@ -11,6 +10,7 @@ export class Entities {
     private classList: { [key: string]: Object } | null = null;
     private subClassList: { [key: string]: Object } | null = null;
     private itemsLoaded: boolean = false;
+    private currentSearchNumber: number | null = null;
 
     /**
      * 
@@ -28,88 +28,112 @@ export class Entities {
         const maxLoad = game.settings.get(CMPBrowser.MODULE_NAME, "maxload") ?? CMPBrowser.MAXLOAD;
         const ActiveFilters = game.compendiumBrowser.filters.getByName(entityType).activeFilters;
         const packs = game.packs.filter((pack) => pack.metadata.entity === Category);
+        const searchNumber = Date.now();
+
+        this.currentSearchNumber = searchNumber;
+
         //0.4.1: Load and filter just one of spells, feats, and items (specified by browserTab)
-        let unfoundSpells = '';
-        let numItemsLoaded = 0,
+        let unfoundSpells = '',
+            numItemsLoaded = 0,
             numPacks = packs.length,
-            comp_list = new compactList();
+            comp_list = new compactList(),
+            tmp_array;
 
         comp_list.activeFilters = JSON.stringify(ActiveFilters);
 
-        //Filter the full list, but only save the core compendium information + displayed info 
-        for (let pack of packs) {
-            if (game.compendiumBrowser.settings.loadedCompendium[pack.metadata.entity][pack.collection].load) {
-                //FIXME: How much could we do with the loaded index rather than all content? 
-                //OR filter the content up front for the decoratedItem.type??               
-                await pack.getDocuments().then((content: Collection<Item | Actor | RollTable | JournalEntry>) => {
-                    for (let currentEntity of content) {
-                        // fail fast
-                        if (currentEntity.data.type != entityType.toLowerCase() && entityType != Category) continue;
-                        if (!Filter.passesFilter(currentEntity, ActiveFilters)) continue;
+        try {
+            for (let pack of packs) {
+                if (game.compendiumBrowser.settings.loadedCompendium[pack.metadata.entity][pack.collection].load) {
+                    await pack.getDocuments().then((content: Collection<Item | Actor | RollTable | JournalEntry | Scene>) => {
+                        content.reduce((
+                                itemsList: any,
+                                currentEntity: Item | Actor | RollTable | JournalEntry | Scene
+                            ) => {
+                                
+                            if (this.currentSearchNumber != searchNumber) throw STOP_SEARCH;
 
-                        let decorated = decoratedEntity.decorate(currentEntity, entityType, this.packList, this.classList, this.subClassList);
-                        let compact = new compactEntity();
+                            numItemsLoaded = comp_list.size();
 
-                        // set common properties for all entities
-                        
-                        compact._id = decorated._id;
-                        compact.name = decorated.name;
-                        compact.compendium = pack.collection;
-                        compact.img = decorated.img;
-                        compact.type = decorated.type;
-                        compact.data = decorated.data;
-                        compact.flags = decorated.flags;
-
-                        if (ActiveFilters) {
-                            for (let index in ActiveFilters) {
-                                setProperty(compact, `tags.${ActiveFilters[index].path}`, ActiveFilters[index].value);
+                            if (maxLoad <= numItemsLoaded) {
+                                if (updateLoading) {ui.notifications.info(`Loaded ${numItemsLoaded} ${entityType}s from ${numPacks} Compendia.`);}
+                                throw STOP_SEARCH;
                             }
-                        }
 
-                        if (Category == 'Item') {
-                            compact.dae = (decorated.effects?.size) || false;
-                        }
+                            // fail fast
+                            if (currentEntity.data.type != entityType.toLowerCase() && entityType != Category) return itemsList;
+                            if (!Filter.passesFilter(currentEntity, ActiveFilters)) return itemsList;
 
-                        switch (entityType) {
-                            case "Spell":
-                            case "Feat":
-                                if (entityType === 'Spell' || ["feat", "class"].includes(decorated.type)) {
-                                    compact.classRequirement = decorated.classRequirement;
+                            let decorated = decoratedEntity.decorate(currentEntity, entityType, this.packList, this.classList, this.subClassList);
+                            let compact = new compactEntity();
+
+                            // set common properties for all entities
+                            
+                            compact._id = decorated._id;
+                            compact.name = decorated.name;
+                            compact.compendium = pack.collection;
+                            compact.img = decorated.img;
+                            compact.type = decorated.type;
+                            compact.data = decorated.data;
+                            compact.flags = decorated.flags;
+
+                            if (ActiveFilters) {
+                                for (let index in ActiveFilters) {
+                                    setProperty(compact, `tags.${ActiveFilters[index].path}`, ActiveFilters[index].value);
                                 }
-                                break;
-                            case "Item":
-                                //0.4.5: Itm type for true items could be many things (weapon, consumable, etc) so we just look for everything except spells, feats, classes
-                                if (!["spell", "feat", "class"].includes(decorated.type)) {
-                                    compact.rarity = decorated.data.rarity;
-                                    compact.ac = (decorated.data?.armor?.type) ? decorated.data?.armor?.value || false : false;
+                            }
 
-                                    if (compact.type == 'weapon' && (decorated.data?.range?.value)) {
-                                        setProperty(compact, `tags.range`, decorated.data?.range?.value + decorated.data?.range?.units);
+                            if (Category == 'Item') {
+                                compact.dae = (decorated.effects?.size) || false;
+                            }
+
+                            switch (entityType) {
+                                case "Spell":
+                                case "Feat":
+                                    if (entityType === 'Spell' || ["feat", "class"].includes(decorated.type)) {
+                                        compact.classRequirement = decorated.classRequirement;
                                     }
-                                }
-                                break;
-                            case "Actor":
-                                    compact.displayCR = decorated.displayCR;
-                                    compact.displaySize = decorated.displaySize;
-                                    compact.displayType = decorated.data?.details?.type;
-                                    compact.orderCR = decorated.orderCR;
-                                    compact.orderSize = decorated.filterSize;
-                                    compact.data.details = decorated.data.details;
-                                break;
-                            case "Scene":
-                                    compact.img = currentEntity.data.thumb;
-                            default:
-                                break;
-                        }
+                                    break;
+                                case "Item":
+                                    //0.4.5: Itm type for true items could be many things (weapon, consumable, etc) so we just look for everything except spells, feats, classes
+                                    if (!["spell", "feat", "class"].includes(decorated.type)) {
+                                        compact.rarity = decorated.data.rarity;
+                                        compact.ac = (decorated.data?.armor?.type) ? decorated.data?.armor?.value || false : false;
 
-                        comp_list.addEntity(compact);
-                        if (updateLoading) {ui.notifications.info(`Loaded ${numItemsLoaded} ${entityType}s from ${numPacks} Compendia.`);}
-                        if (numItemsLoaded++ >= maxLoad) break;                        
-                    }
-                }); // get Entities
+                                        if (compact.type == 'weapon' && (decorated.data?.range?.value)) {
+                                            setProperty(compact, `tags.range`, decorated.data?.range?.value + decorated.data?.range?.units);
+                                        }
+                                    }
+                                    break;
+                                case "Actor":
+                                        compact.displayCR = decorated.displayCR;
+                                        compact.displaySize = decorated.displaySize;
+                                        compact.displayType = decorated.data?.details?.type;
+                                        compact.orderCR = decorated.orderCR;
+                                        compact.orderSize = decorated.filterSize;
+                                        compact.data.details = decorated.data.details;
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            itemsList[compact._id] = compact;
+                            comp_list.addEntity(compact);
+
+                            return itemsList;
+                        }, []);
+                    }); // get Entities
+                }
+            }//for packs
+            
+            numItemsLoaded = comp_list.size();
+            if (updateLoading) {ui.notifications.info(`Loaded ${numItemsLoaded} ${entityType}s from ${numPacks} Compendia.`);}
+        } catch(e){
+            if (e === STOP_SEARCH){
+                //stopping search early
+            } else{
+                throw e;
             }
-            if (numItemsLoaded >= maxLoad) break;
-        }//for packs
+        }
 
         console.timeEnd("loadAndFilterItems");
         console.log(`Load and Filter Items | Finished loading ${comp_list.size()} ${entityType}s`);

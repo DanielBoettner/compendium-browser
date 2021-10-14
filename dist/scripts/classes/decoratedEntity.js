@@ -160,6 +160,7 @@ export class decoratedEntity extends compactEntity {
                 break;
             case 'Scene':
                 decorated.data.dimensions = entityData.height + ' * ' + entityData.width;
+                decorated.img = entityData.thumb;
         }
         return decorated;
     }
