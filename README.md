@@ -13,7 +13,7 @@ Compendium Browser is faster and better-behaved; **it no longer loads all the co
 3. Open your world and go to **Settings** > **Manage Modules** and enable Compendium Browser
 
 
-![example](preview.jpg)
+![example](preview.webp)
 
 ## Details
 Only the Gamemaster has access to the Settings, where they can enable or disable player access to the spell or npc-browser. It is **highly** recommended to disable any compendia that do not contain spell or should not be used in the NPC Browser. .
