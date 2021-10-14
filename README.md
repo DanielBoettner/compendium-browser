@@ -23,7 +23,7 @@ All filters featured in the app are included in can be found in `scripts/modules
 
 ## Summary
 * **Authors**: 
-  * **Daniel Böttner:**  [Github Profile]('https://github.com/DanielBoettner') | [Join FVTT League Developers Discord](https://discord.gg/PHmVQrG5)
+  * **Daniel Böttner:**  [Github Profile](https://github.com/DanielBoettner) | [Join FVTT League Developers Discord](https://discord.gg/PHmVQrG5)
   * **Spetzel:** Discord Tag Spetzel#0103 | [Join FVTT League Developers Discord](https://discord.gg/PHmVQrG5)
   * **Felix Müller:** [e-mail](felix.mueller.86@web.de)
 * **Version**: 0.7.9
