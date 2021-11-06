@@ -17,5 +17,11 @@
     "includePath": [
         "C:\\Program Files\\FoundryVTT\\resources\\app",
         "C:\\Users\\jackp\\AppData\\Local\\FoundryVTT\\Data\\systems\\dnd5e\\module"
-    ]
+    ],
+    "filesync.mappings": [
+        {
+            "source": "C:\\Users\\jackp\\Documents\\GitHub\\compendium-browser\\dist",
+            "destination": "C:\\Users\\jackp\\AppData\\Local\\FoundryVTT\\Data\\modules\\compendium-browser"
+        }
+    ],
 }
