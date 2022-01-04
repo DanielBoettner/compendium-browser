@@ -21,10 +21,10 @@ export class CompendiumBrowser extends Application {
     }
 
     /**
-     * 
+     *
      */
     static get defaultOptions() {
-        const options = super.defaultOptions;
+        let options = super.defaultOptions;
         mergeObject(options, {
             title: "CMPBrowser.compendiumBrowser",
             tabs: [{ navSelector: ".tabs", contentSelector: ".content", initial: "Item" }],
@@ -70,7 +70,7 @@ export class CompendiumBrowser extends Application {
     }
 
     /**
-     * 
+     *
      * @returns {Obejct} data
      */
     async getData() {
@@ -80,17 +80,17 @@ export class CompendiumBrowser extends Application {
             filters: {
                 Actor: this.filters.getByName('Actor'),
                 Item: this.filters.getByName('Item'),
-                JournalEntry: this.filters.getByName('JounralEntry'),                
+                JournalEntry: this.filters.getByName('JounralEntry'),
                 RollTable: this.filters.getByName('RollTable'),
                 Spell: this.filters.getByName('Spell'),
                 Scene: this.filters.getByName('Scene'),
             },
-            showActorBrowser: (game.user.isGM) || this.settings.allowActorBrowser,            
+            showActorBrowser: (game.user.isGM) || this.settings.allowActorBrowser,
             showFeatBrowser: (game.user.isGM) || this.settings.allowFeatBrowser,
             showItemBrowser: (game.user.isGM) || this.settings.allowItemBrowser,
-            showJournalEntryBrowser: (game.user.isGM) || this.settings.allowJournalEntryBrowser,                        
+            showJournalEntryBrowser: (game.user.isGM) || this.settings.allowJournalEntryBrowser,
             showRollTableBrowser: (game.user.isGM) || this.settings.allowRollTableBrowser,
-            showSceneBrowser: (game.user.isGM) || this.settings.allowSceneBrowser,            
+            showSceneBrowser: (game.user.isGM) || this.settings.allowSceneBrowser,
             showSpellBrowser: (game.user.isGM) || this.settings.allowSpellBrowser,
             settings: this.settings,
             isGM: game.user.isGM
@@ -123,7 +123,7 @@ export class CompendiumBrowser extends Application {
         Events.activateItemListListeners(html);
         Events.activateFilterListeners(html);
         Events.registerDropTarget(html);
-        
+
         //Just for the loading image
         if (this.observer) {
             html.find(".entity-image").each((i, imageElement) => this.observer.observe(imageElement));
@@ -174,17 +174,17 @@ export class CompendiumBrowser extends Application {
     }
 
     /**
-     * 
-     * @param {*} html 
-     * @param {*} entityType 
-     * @param {*} options 
+     *
+     * @param {*} html
+     * @param {*} entityType
+     * @param {*} options
      */
     async replaceList(html, entityType, options = { reload: true }) {
         //After rendering the first time or re-rendering trigger the load/reload of visible data
         let entityListElement = document.querySelector('.tab.active .browser .cb_entities');
 
         if (entityListElement && entityListElement.childElementCount !== undefined) {
-            //0.4.2b: On a tab-switch, only reload if there isn't any data already 
+            //0.4.2b: On a tab-switch, only reload if there isn't any data already
             if (options?.reload || entityListElement.childElementCount < 1) {
 
                 const maxLoad = game.settings.get(CMPBrowser.MODULE_NAME, "maxload") ?? CMPBrowser.MAXLOAD;
